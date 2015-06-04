@@ -127,6 +127,12 @@ var admatchers = [
         name: 'tomshardware',
         handler: imageInAnchor.bind(null, 'tomshardware'),
         domain: 'www.tomshardware.com'
+    }, {
+        selector: '.ad-right',  // #298
+        waitfor: ".ad-element",
+        name: 'sportingnews',
+        handler: imageInAnchor.bind(null, 'sportingnews'),
+        domain: 'wwww.sportingnews.com'
     }
 
     //{ selector: ".ad, .widead", waitfor: "iframe > a", handler: msnImg, name: 'msn' },
