@@ -117,7 +117,7 @@ function setCurrent(json) {
     setAttempting(json.current);
 }
 
-function doLayout(adsets) {
+function doLayout(adsets, doneCreateDivs) {
 
     //log('Vault.doLayout: '+adsets.length +" ad-sets, total="+numFound(adsets));
 
@@ -125,7 +125,10 @@ function doLayout(adsets) {
 
     $('.item').remove();
 
-    createDivs(adsets);
+    if (doneCreateDivs == undefined) {
+        createDivs(adsets);
+        return;
+    }
 
     computeStats(adsets);
 
@@ -160,19 +163,26 @@ function createDivs(adsets) {
         }
     }
 
-    for (var i = 0; i < adsets.length; i++) {
+    var i = 0;
+    var interval = setInterval(function () {
 
         var $div = $('<div/>', {
 
-                'class': 'item dup-count-' + adsets[i].count(),
-                'data-gid': adsets[i].gid
+            'class': 'item dup-count-' + adsets[i].count(),
+            'data-gid': adsets[i].gid
 
-            }).appendTo('#container');
+        }).appendTo('#container');
 
         layoutAd($div, adsets[i]);
 
         $div.hover(hoverOnDiv, hoverOffDiv);
-    }
+
+        i++;
+        if (i >= adsets.length) {
+            clearInterval(interval);
+            doLayout(adsets, true);
+        }
+    }, 5);
 }
 
 function layoutAd($div, adset) {
