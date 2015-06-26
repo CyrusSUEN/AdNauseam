@@ -125,13 +125,29 @@ function doLayout(adsets) {
 
     $('.item').remove();
 
+    console.log("Currently running: ", "createDivs");
+    var t0 = performance.now();
     createDivs(adsets);
+    var t1 = performance.now();
+    console.log("createDivs", "took: ",(t1 - t0), " milliseconds.");
 
+    console.log("Currently running: ", "computeStats");
+    var t0 = performance.now();
     computeStats(adsets);
+    var t1 = performance.now();
+    console.log("computeStats", "took: ",(t1 - t0), " milliseconds.");
 
+    console.log("Currently running: ", "enableLightbox");
+    var t0 = performance.now();
     enableLightbox();
+    var t1 = performance.now();
+    console.log("enableLightbox", "took: ",(t1 - t0), " milliseconds.");
 
+    console.log("Currently running: ", "repack");
+    var t0 = performance.now();
     repack();
+    var t1 = performance.now();
+    console.log("repack", "took: ",(t1 - t0), " milliseconds.");
 }
 
 function createDivs(adsets) {
@@ -170,23 +186,42 @@ function createDivs(adsets) {
             }).appendTo('#container');
 
         layoutAd($div, adsets[i]);
-
         $div.hover(hoverOnDiv, hoverOffDiv);
     }
 }
 
 function layoutAd($div, adset) {
 
+    console.log("Currently running: ", "appendTextDisplayTo");
+    var t0 = performance.now();
     // append the display
     (adset.child(0).contentType === 'text' ?
         appendTextDisplayTo : appendDisplayTo)($div, adset);
+    var t1 = performance.now();
+    console.log("appendTextDisplayTo", "took: ",(t1 - t0), " milliseconds.");
 
+
+    console.log("Currently running: ", "appendBulletsTo");
+    var t0 = performance.now();
     appendBulletsTo($div, adset);
-    appendMetaTo($div, adset);
+    var t1 = performance.now();
+    console.log("appendBulletsTo", "took: ",(t1 - t0), " milliseconds.");
 
+
+    console.log("Currently running: ", "appendMetaTo");
+    var t0 = performance.now();
+    appendMetaTo($div, adset);
+    var t1 = performance.now();
+    console.log("appendMetaTo", "took: ",(t1 - t0), " milliseconds.");
+
+
+    console.log("Currently running: ", "setItemClass");
+    var t0 = performance.now();
     var state = adset.groupState();
     //log('setGroupState: '+$div.length,state);
     setItemClass($div, state);
+    var t1 = performance.now();
+    console.log("setItemClass", "took: ",(t1 - t0), " milliseconds.");
 }
 
 function doUpdate(updated) {
