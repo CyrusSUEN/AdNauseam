@@ -6,6 +6,12 @@
     TEXT_MINW, TEXT_MAXW, TEST_APPEND_IDS, TEST_ADS, TEST_MODE, TEST_PAGE
 */
 
+var p0, p1, p2, p3; // storing performance profiling data
+p0 = [];
+p1 = [];
+p2 = [];
+p3 = [];
+
 const LogoURL = 'http://dhowe.github.io/AdNauseam/',
     States = ['pending', 'visited', 'failed'],
     Zooms = [100, 50, 25, 12.5, 6.25],
@@ -125,29 +131,30 @@ function doLayout(adsets) {
 
     $('.item').remove();
 
-    console.log("Currently running: ", "createDivs");
-    var t0 = performance.now();
     createDivs(adsets);
-    var t1 = performance.now();
-    console.log("createDivs", "took: ",(t1 - t0), " milliseconds.");
 
-    console.log("Currently running: ", "computeStats");
-    var t0 = performance.now();
     computeStats(adsets);
-    var t1 = performance.now();
-    console.log("computeStats", "took: ",(t1 - t0), " milliseconds.");
 
-    console.log("Currently running: ", "enableLightbox");
-    var t0 = performance.now();
     enableLightbox();
-    var t1 = performance.now();
-    console.log("enableLightbox", "took: ",(t1 - t0), " milliseconds.");
 
-    console.log("Currently running: ", "repack");
-    var t0 = performance.now();
     repack();
-    var t1 = performance.now();
-    console.log("repack", "took: ",(t1 - t0), " milliseconds.");
+    
+    profiling(p0);
+    profiling(p1);
+    profiling(p2);
+    profiling(p3);
+}
+
+function profiling(p) {
+    
+    // print total time
+    var sum = 0;
+    for (var i in p)
+        sum += p[i];
+    console.log("Total time: ", sum);
+    
+    // print avg time
+    console.log("Avg time: ", sum / p.length);    
 }
 
 function createDivs(adsets) {
@@ -192,36 +199,40 @@ function createDivs(adsets) {
 
 function layoutAd($div, adset) {
 
-    console.log("Currently running: ", "appendTextDisplayTo");
+    // console.log("Currently running: ", "append*To");
     var t0 = performance.now();
     // append the display
     (adset.child(0).contentType === 'text' ?
         appendTextDisplayTo : appendDisplayTo)($div, adset);
     var t1 = performance.now();
-    console.log("appendTextDisplayTo", "took: ",(t1 - t0), " milliseconds.");
+    p0.push(t1 - t0);
+    // console.log(p0[0] != null && "append*To", "took: ", p0[p0.length -1], " milliseconds.");
 
 
-    console.log("Currently running: ", "appendBulletsTo");
-    var t0 = performance.now();
+    // console.log("Currently running: ", "appendBulletsTo");
+    t0 = performance.now();
     appendBulletsTo($div, adset);
-    var t1 = performance.now();
-    console.log("appendBulletsTo", "took: ",(t1 - t0), " milliseconds.");
+    t1 = performance.now();
+    p1.push(t1 - t0);
+    // console.log(p1[0] != null && "appendBulletsTo", "took: ", p1[p1.length -1], " milliseconds.");
 
 
-    console.log("Currently running: ", "appendMetaTo");
-    var t0 = performance.now();
+    // console.log("Currently running: ", "appendMetaTo");
+    t0 = performance.now();
     appendMetaTo($div, adset);
-    var t1 = performance.now();
-    console.log("appendMetaTo", "took: ",(t1 - t0), " milliseconds.");
+    t1 = performance.now();
+    p2.push(t1 - t0);
+    // console.log(p2[0] != null && "appendMetaTo", "took: ", p2[p2.length -1], " milliseconds.");
 
 
-    console.log("Currently running: ", "setItemClass");
-    var t0 = performance.now();
+    // console.log("Currently running: ", "setItemClass");
+    t0 = performance.now();
     var state = adset.groupState();
     //log('setGroupState: '+$div.length,state);
     setItemClass($div, state);
-    var t1 = performance.now();
-    console.log("setItemClass", "took: ",(t1 - t0), " milliseconds.");
+    t1 = performance.now();
+    p3.push(t1 - t0);
+    // console.log(p3[0] != null && "setItemClass", "took: ", p3[p3.length -1], " milliseconds.");
 }
 
 function doUpdate(updated) {
