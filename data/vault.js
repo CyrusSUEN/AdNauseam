@@ -143,6 +143,9 @@ function doLayout(adsets) {
     profiling(p1);
     profiling(p2);
     profiling(p3);
+    console.log("Total time of 4 combined: ", 
+        p0[p0.length - 1] + p1[p1.length - 1] + p2[p2.length - 1] + p3[p3.length - 1], 
+        " milliseconds");
 }
 
 function profiling(p) {
@@ -151,10 +154,13 @@ function profiling(p) {
     var sum = 0;
     for (var i in p)
         sum += p[i];
-    console.log("Total time: ", sum);
+    console.log("Total time: ", sum, " milliseconds");
     
     // print avg time
-    console.log("Avg time: ", sum / p.length);    
+    console.log("Avg time: ", sum / p.length, "  milliseconds");
+    
+    // saved the total time
+    p.push(sum);
 }
 
 function createDivs(adsets) {
