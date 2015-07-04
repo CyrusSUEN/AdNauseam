@@ -334,6 +334,15 @@ function bulletIndex($div, adset) { // adset.index must be updated first
   $bullet.addClass('active')
     .siblings().removeClass('active');
 
+  var pendingBulletIndex = adset.index + 1;
+  if (pendingBulletIndex === adset.count())
+    pendingBulletIndex = 0;
+    
+  var $pendingBullet = $div.find('.bullet[data-idx=' + (pendingBulletIndex) + ']');
+  
+  $pendingBullet.addClass('pending')
+    .siblings().removeClass('pending');
+
   // shift the meta-list to show correct info
   $ul = $div.find('.meta-list');
   $ul.css('margin-top', (adset.index * -110) + 'px');
